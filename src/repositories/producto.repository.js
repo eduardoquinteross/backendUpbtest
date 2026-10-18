@@ -1,8 +1,14 @@
 const pool = require('../config/db');
 const Producto = require('../entities/producto.entity');
 
-const findAll = async () => {
-    const { rows } = await pool.query('SELECT * FROM productos ORDER BY id');
+const findAll = async (nombre) => {
+    const termino = nombre?.trim();
+    const { rows } = await pool.query(
+        termino
+            ? 'SELECT * FROM productos WHERE nombre ILIKE $1 ORDER BY id'
+            : 'SELECT * FROM productos ORDER BY id',
+        termino ? [`%${termino}%`] : []
+    );
     return rows.map(Producto.fromRow);
 };
 

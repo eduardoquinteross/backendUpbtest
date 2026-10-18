@@ -4,8 +4,9 @@ const { crearProductoDto, actualizarProductoDto, productoResponseDto } = require
 // Express 5 captura los errores de funciones async y los manda al manejador de errores,
 // por eso no hace falta try/catch aquí
 
+// Admite ?nombre=texto para filtrar por nombre, sin distinguir mayúsculas.
 const listar = async (req, res) => {
-    const productos = await productoService.listar();
+    const productos = await productoService.listar(req.query.nombre);
     res.json(productos.map(productoResponseDto));
 };
 
